@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['userTipo']) || $_SESSION['userTipo'] !== 'funcionario') {
+    header('Location: /');
+    exit;
+}
+?>
+
 <table class="table table-hover">
     <thead>
         <tr>
