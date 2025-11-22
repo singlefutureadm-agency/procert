@@ -113,7 +113,7 @@ if (isset($_SESSION['mensagem']) && isset($_SESSION['tipo-msg'])) {
 
     <div class="text-center mt-4">
         <h4 class="text-black">Não encontrou o administrador? Cadastre abaixo</h4>
-        <a href="http://localhost/procert/public/administradors/adicionar" class="btn btn-primary btn-lg mt-2">
+        <a href="http://localhost/procert/public/administrador/adicionar" class="btn btn-primary btn-lg mt-2">
             Adicionar administrador
         </a>
     </div>

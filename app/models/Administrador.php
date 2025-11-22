@@ -61,22 +61,30 @@ class Administrador extends Model
     public function addFuncionario($dados)
     {
         $sql = "INSERT INTO tbl_funcionario (
-                    nome_funcionario,
-                    email_funcionario,
-                    senha_funcionario,
-                    id_tipo_usuario,
-                    status_funcionario,
-                    foto_funcionario,
-                    id_uf
-                ) VALUES (
-                    :nome_funcionario,
-                    :email_funcionario,
-                    :senha_funcionario,
-                    :id_tipo_usuario,
-                    :status_funcionario,
-                    :foto_funcionario,
-                    :id_uf
-                )";
+                nome_funcionario,
+                email_funcionario,
+                senha_funcionario,
+                id_tipo_usuario,
+                status_funcionario,
+                foto_funcionario,
+                id_uf,
+                estado_funcionario,
+                cpf_funcionario,
+                cnpj_funcionario,
+                tipo_pessoa
+            ) VALUES (
+                :nome_funcionario,
+                :email_funcionario,
+                :senha_funcionario,
+                :id_tipo_usuario,
+                :status_funcionario,
+                :foto_funcionario,
+                :id_uf,
+                :estado_funcionario,
+                :cpf_funcionario,
+                :cnpj_funcionario,
+                :tipo_pessoa
+            )";
 
         $stmt = $this->db->prepare($sql);
 
@@ -84,13 +92,22 @@ class Administrador extends Model
         $stmt->bindValue(':email_funcionario', $dados['email_funcionario']);
         $stmt->bindValue(':senha_funcionario', $dados['senha_funcionario']);
         $stmt->bindValue(':id_tipo_usuario', $dados['id_tipo_usuario']);
-        $stmt->bindValue(':status_funcionario', $dados['status_funcionario']);
+        $stmt->bindValue(':status_funcionario', 'Ativo');
         $stmt->bindValue(':foto_funcionario', $dados['foto_funcionario']);
         $stmt->bindValue(':id_uf', $dados['id_uf']);
+
+        // Novos campos
+        $stmt->bindValue(':cpf_funcionario', $dados['cpf_funcionario']);
+        $stmt->bindValue(':cnpj_funcionario', $dados['cnpj_funcionario']);
+        $stmt->bindValue(':tipo_pessoa', $dados['tipo_pessoa']);
+        $stmt->bindValue(':estado_funcionario', $dados['estado_funcionario']);
+
+
 
         $stmt->execute();
         return $this->db->lastInsertId();
     }
+
 
 
     // ================================
@@ -108,7 +125,7 @@ class Administrador extends Model
                     id_uf = :id_uf
                 WHERE 
                     id_funcionario = :id_funcionario";
-    
+
         $stmt = $this->db->prepare($sql);
 
         $stmt->bindValue(':nome_funcionario', $dados['nome_funcionario']);
@@ -143,19 +160,18 @@ class Administrador extends Model
     // ================================
     // Atualizar foto do funcionário
     // ================================
-    public function updateFotoFuncionario($id_funcionario, $arquivo, $nome_funcionario)
-    {
-        $sql = "UPDATE tbl_funcionario SET 
-                    foto_funcionario = :foto_funcionario,
-                    alt_foto_funcionario = :alt_foto_funcionario
-                WHERE 
-                    id_funcionario = :id_funcionario";
+  public function updateFotoFuncionario($id_funcionario, $arquivo)
+{
+    $sql = "UPDATE tbl_funcionario SET 
+                foto_funcionario = :foto_funcionario
+            WHERE 
+                id_funcionario = :id_funcionario";
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':foto_funcionario', $arquivo);
-        $stmt->bindValue(':alt_foto_funcionario', $nome_funcionario);
-        $stmt->bindValue(':id_funcionario', $id_funcionario);
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindValue(':foto_funcionario', $arquivo);
+    $stmt->bindValue(':id_funcionario', $id_funcionario);
 
-        return $stmt->execute();
-    }
+    return $stmt->execute();
+}
+
 }

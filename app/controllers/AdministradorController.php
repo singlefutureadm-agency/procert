@@ -35,7 +35,6 @@ class AdministradorController extends Controller
             $dados['func'] = $dadosFunc;
 
             $this->carregarViews('dash/dashboard', $dados);
-
         } else if ($_SESSION['id_tipo_usuario'] == '2') {
             $func = new Funcionario();
             $dadosFunc = $func->buscarFuncionario($_SESSION['userEmail']);
@@ -53,65 +52,80 @@ class AdministradorController extends Controller
     {
         $dados = array();
 
-       
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $nome_funcionario     = filter_input(INPUT_POST, 'nome_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
-            $email_funcionario    = filter_input(INPUT_POST, 'email_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+            $email_funcionario    = filter_input(INPUT_POST, 'email_funcionario', FILTER_SANITIZE_EMAIL);
             $senha_funcionario    = filter_input(INPUT_POST, 'senha_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
             $status_funcionario   = filter_input(INPUT_POST, 'status_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
             $id_uf                = filter_input(INPUT_POST, 'id_uf', FILTER_SANITIZE_SPECIAL_CHARS);
-            $id_tipo_usuario      = 1; // ADMINISTRADOR FIXO
 
-            if ($nome_funcionario && $email_funcionario && $senha_funcionario) {
+            // 👉 NOVO CAMPO
+            $estado_funcionario   = filter_input(INPUT_POST, 'estado_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
 
-                // Preparar dados
-                $dadosAdmin = array(
-                    'nome_funcionario'   => $nome_funcionario,
-                    'email_funcionario'  => $email_funcionario,
-                    'senha_funcionario'  => password_hash($senha_funcionario, PASSWORD_DEFAULT),
-                    'id_tipo_usuario'    => $id_tipo_usuario,
-                    'status_funcionario' => $status_funcionario,
-                    'foto_funcionario'   => '', // será substituído se enviar foto
-                    'id_uf'              => $id_uf
-                );
+            // Campos novos
+            $tipo_pessoa          = filter_input(INPUT_POST, 'tipo_pessoa', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cpf_funcionario      = filter_input(INPUT_POST, 'cpf_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cnpj_funcionario     = filter_input(INPUT_POST, 'cnpj_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
 
-                // Inserir no banco
-                $id_funcionario = $this->administradorModel->addFuncionario($dadosAdmin);
+            $id_tipo_usuario      = 1; // ADMIN
 
-                if ($id_funcionario) {
+            if ($nome_funcionario && $email_funcionario && $senha_funcionario && $tipo_pessoa) {
 
-                    // Upload de foto, se enviada
-                    if (isset($_FILES['foto_funcionario']) && $_FILES['foto_funcionario']['error'] == 0) {
+                if ($tipo_pessoa == "F" && empty($cpf_funcionario)) {
+                    $dados['mensagem'] = "Informe o CPF para pessoa física.";
+                    $dados['tipo-msg'] = "erro";
+                } elseif ($tipo_pessoa == "J" && empty($cnpj_funcionario)) {
+                    $dados['mensagem'] = "Informe o CNPJ para pessoa jurídica.";
+                    $dados['tipo-msg'] = "erro";
+                } else {
 
-                        $arquivo = $this->uploadFoto($_FILES['foto_funcionario']);
+                    // Array enviado ao Model
+                    $dadosAdmin = array(
+                        'nome_funcionario'   => $nome_funcionario,
+                        'email_funcionario'  => $email_funcionario,
+                        'senha_funcionario'  => password_hash($senha_funcionario, PASSWORD_DEFAULT),
+                        'id_tipo_usuario'    => $id_tipo_usuario,
+                        'status_funcionario' => $status_funcionario,
+                        'foto_funcionario'   => '',
+                        'id_uf'              => $id_uf,
+                        'estado_funcionario' => $estado_funcionario, // 👉 NOVO CAMPO
+                        'tipo_pessoa'        => $tipo_pessoa,
+                        'cpf_funcionario'    => $cpf_funcionario ?: null,
+                        'cnpj_funcionario'   => $cnpj_funcionario ?: null
+                    );
 
-                        if ($arquivo) {
-                            $this->administradorModel->updateFotoFuncionario($id_funcionario, $arquivo, $nome_funcionario);
+                    $id_funcionario = $this->administradorModel->addFuncionario($dadosAdmin);
+
+                    if ($id_funcionario) {
+
+                        if (isset($_FILES['foto_funcionario']) && $_FILES['foto_funcionario']['error'] == 0) {
+
+                            $arquivo = $this->uploadFoto($_FILES['foto_funcionario']);
+
+                            if ($arquivo) {
+                                $this->administradorModel->updateFotoFuncionario($id_funcionario, $arquivo, $nome_funcionario);
+                            }
                         }
+
+                        $_SESSION['mensagem'] = "Administrador cadastrado com sucesso!";
+                        $_SESSION['tipo-msg'] = "sucesso";
+                        header('Location: ' . BASE_URL . 'administrador/adicionar');
+                        exit;
                     }
 
-                    $_SESSION['mensagem'] = "Administrador cadastrado com sucesso!";
-                    $_SESSION['tipo-msg'] = "sucesso";
-                    header('Location: ' . BASE_URL . 'administrador/adicionar');
-                    exit;
+                    $dados['mensagem'] = "Erro ao cadastrar administrador.";
+                    $dados['tipo-msg'] = "erro";
                 }
-
-                $dados['mensagem'] = "Erro ao cadastrar administrador.";
-                $dados['tipo-msg'] = "erro";
-
             } else {
                 $dados['mensagem'] = "Preencha todos os campos obrigatórios.";
                 $dados['tipo-msg'] = "erro";
             }
         }
 
-        // Carregar estados
         $estados = new Estado();
         $dados['estados'] = $estados->getListarEstados();
 
-        // Carregar usuário
         $func = new Funcionario();
         $dados['func'] = $func->buscarFuncionario($_SESSION['userEmail']);
 
@@ -125,6 +139,7 @@ class AdministradorController extends Controller
     }
 
 
+
     // ============================================================
     // 3 — EDITAR ADMINISTRADOR
     // ============================================================
@@ -133,38 +148,45 @@ class AdministradorController extends Controller
         $dados = array();
 
         if (!isset($id) || empty($id)) {
-            header('Location:' . BASE_URL . 'administrador/editar');
+            header('Location:' . BASE_URL . 'administrador/listar');
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $nome_funcionario     = filter_input(INPUT_POST, 'nome_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
-            $email_funcionario    = filter_input(INPUT_POST, 'email_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+            $email_funcionario    = filter_input(INPUT_POST, 'email_funcionario', FILTER_SANITIZE_EMAIL);
             $status_funcionario   = filter_input(INPUT_POST, 'status_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
             $id_uf                = filter_input(INPUT_POST, 'id_uf', FILTER_SANITIZE_SPECIAL_CHARS);
 
+            // 👉 IGUAL AO ADICIONAR
+            $estado_funcionario   = filter_input(INPUT_POST, 'estado_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+            $tipo_pessoa          = filter_input(INPUT_POST, 'tipo_pessoa', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cpf_funcionario      = filter_input(INPUT_POST, 'cpf_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cnpj_funcionario     = filter_input(INPUT_POST, 'cnpj_funcionario', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // Array base
             $dadosAdmin = array(
                 'nome_funcionario'   => $nome_funcionario,
                 'email_funcionario'  => $email_funcionario,
-                'senha_funcionario'  => '', // só muda se enviar
                 'id_tipo_usuario'    => 1,
                 'status_funcionario' => $status_funcionario,
-                'foto_funcionario'   => '',
                 'id_uf'              => $id_uf,
+                'estado_funcionario' => $estado_funcionario,
+                'tipo_pessoa'        => $tipo_pessoa,
+                'cpf_funcionario'    => $cpf_funcionario ?: null,
+                'cnpj_funcionario'   => $cnpj_funcionario ?: null
             );
 
-            // Se enviou nova senha
+            // 👉 Atualiza a senha somente se enviada
             if (!empty($_POST['senha_funcionario'])) {
                 $dadosAdmin['senha_funcionario'] = password_hash($_POST['senha_funcionario'], PASSWORD_DEFAULT);
-            } else {
-                unset($dadosAdmin['senha_funcionario']);
             }
 
-            // Atualizar
+            // 👉 Atualiza dados no Model
             $this->administradorModel->updateFuncionario($id, $dadosAdmin);
 
-            // Upload de foto
+            // 👉 Upload da foto (se enviada)
             if (isset($_FILES['foto_funcionario']) && $_FILES['foto_funcionario']['error'] == 0) {
 
                 $arquivo = $this->uploadFoto($_FILES['foto_funcionario']);
@@ -181,10 +203,10 @@ class AdministradorController extends Controller
             exit;
         }
 
-        // Buscar admin
+        // Buscar admin atual
         $dados['admin'] = $this->administradorModel->getFuncionarioById($id);
 
-        // Estados
+        // Estados do select
         $estados = new Estado();
         $dados['estados'] = $estados->getListarEstados();
 
@@ -196,6 +218,7 @@ class AdministradorController extends Controller
 
         $this->carregarViews('dash/dashboard', $dados);
     }
+
 
 
     // ============================================================

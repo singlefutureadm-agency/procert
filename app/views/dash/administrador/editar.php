@@ -55,141 +55,129 @@ if (isset($_SESSION['mensagem']) && isset($_SESSION['tipo-msg'])) {
     }
 </style>
 
-<form method="POST" action="https://agenciatipi02.smpsistema.com.br/devcycle/exfe/public/clientes/editar/<?php echo $cliente['id_cliente']; ?>" enctype="multipart/form-data">
+<form method="POST" action="<?= BASE_URL ?>administrador/editar/<?= $admin['id_funcionario']; ?>" enctype="multipart/form-data">
     <div class="container mt-4">
         <div class="row">
-            <!-- Formulário principal -->
-            <div class="col-md-8 ">
+
+            <!-- FORMULÁRIO PRINCIPAL -->
+            <div class="col-md-8">
                 <div class="card glass-card">
                     <div class="card-header pb-0">
                         <div class="d-flex align-items-center">
-                            <h5 class="mb-0">Editar Perfil</h5>
-                            <button type="button" class="btn btn-light btn-sm ms-auto">Segurança</button>
+                            <h5 class="mb-0">Editar Funcionário</h5>
                         </div>
                     </div>
 
                     <div class="card-body">
+
                         <h6 class="text-uppercase text-muted mb-3">Informações Pessoais</h6>
                         <div class="row g-3">
+
                             <div class="col-md-6">
-                                <label for="nome_cliente" class="form-label">Nome Completo</label>
-                                <input type="text" class="form-control" id="nome_cliente" name="nome_cliente" value="<?= $cliente['nome_cliente'] ?>" readonly>
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" name="nome_funcionario" 
+                                       value="<?= $admin['nome_funcionario'] ?>" required>
                             </div>
 
                             <div class="col-md-6">
-                                <label for="email_cliente" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email_cliente" name="email_cliente" value="<?= $cliente['email_cliente'] ?>" readonly>
+                                <label class="form-label">E-mail</label>
+                                <input type="email" class="form-control" name="email_funcionario" 
+                                       value="<?= $admin['email_funcionario'] ?>" required>
                             </div>
 
                             <div class="col-md-6">
-                                <label for="senha_cliente" class="form-label">Senha</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="senha_cliente" name="senha_cliente" value="<?= $cliente['senha_cliente'] ?>" readonly>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
-                                        <i id="icon-password" class="fas fa-eye"></i>
-                                    </button>
-                                </div>
+                                <label class="form-label">Senha (somente se quiser trocar)</label>
+                                <input type="password" class="form-control" name="senha_funcionario" placeholder="•••••••">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="nasc_cliente" class="form-label">Data de Nascimento</label>
-                                <input type="date" class="form-control" id="nasc_cliente" name="nasc_cliente" value="<?= $cliente['nasc_cliente'] ?>" readonly>
+                                <label class="form-label">Estado (UF)</label>
+                                <select class="form-select" name="id_uf" required>
+                                    <?php foreach ($estados as $uf): ?>
+                                        <option value="<?= $uf['id_uf']; ?>" 
+                                            <?= ($admin['id_uf'] == $uf['id_uf']) ? 'selected' : ''; ?>>
+                                            <?= $uf['nome_uf']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
+
+                            <!-- NOVO CAMPO -->
+                            <div class="col-md-6">
+                                <label class="form-label">Estado Funcionário</label>
+                                <input type="text" class="form-control" name="estado_funcionario" 
+                                       value="<?= $admin['estado_funcionario'] ?>">
+                            </div>
+
                         </div>
 
                         <hr class="my-4">
 
-                        <h6 class="text-uppercase text-muted mb-3">Preferências de Café</h6>
+                        <h6 class="text-uppercase text-muted mb-3">Dados Pessoa Física / Jurídica</h6>
                         <div class="row g-3">
+
                             <div class="col-md-6">
-                                <label for="id_produto" class="form-label">Tipo de Café</label>
-                                <select class="form-select" id="id_produto" name="id_produto" required>
-                                    <?php foreach ($produtos as $produto): ?>
-                                        <option value="<?= $produto['id_produto']; ?>" <?= ($cliente['id_produto'] == $produto['id_produto']) ? 'selected' : ''; ?>>
-                                            <?= $produto['nome_produto']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                                <label class="form-label">Tipo de Pessoa</label>
+                                <select class="form-select" id="tipo_pessoa" name="tipo_pessoa" required>
+                                    <option value="F" <?= ($admin['tipo_pessoa'] == 'F') ? 'selected' : ''; ?>>Física</option>
+                                    <option value="J" <?= ($admin['tipo_pessoa'] == 'J') ? 'selected' : ''; ?>>Jurídica</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="id_intensidade" class="form-label">Intensidade</label>
-                                <select class="form-select" id="id_intensidade" name="id_intensidade" required>
-                                    <?php foreach ($intensidades as $intensidade): ?>
-                                        <option value="<?= $intensidade['id_intensidade']; ?>" <?= ($cliente['id_intensidade'] == $intensidade['id_intensidade']) ? 'selected' : ''; ?>>
-                                            <?= $intensidade['nivel_intensidade']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                            <div class="col-md-6 div-cpf">
+                                <label class="form-label">CPF</label>
+                                <input type="text" class="form-control" name="cpf_funcionario" 
+                                       value="<?= $admin['cpf_funcionario'] ?>">
+                            </div>
+
+                            <div class="col-md-6 div-cnpj">
+                                <label class="form-label">CNPJ</label>
+                                <input type="text" class="form-control" name="cnpj_funcionario" 
+                                       value="<?= $admin['cnpj_funcionario'] ?>">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="id_acompanhamento" class="form-label">Acompanhamento</label>
-                                <select class="form-select" id="id_acompanhamento" name="id_acompanhamento" required>
-                                    <?php foreach ($acompanhamentos as $acompanhamento): ?>
-                                        <option value="<?= $acompanhamento['id_acompanhamento']; ?>" <?= ($cliente['id_acompanhamento'] == $acompanhamento['id_acompanhamento']) ? 'selected' : ''; ?>>
-                                            <?= $acompanhamento['nome_acompanhamento']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                                <label class="form-label">Status</label>
+                                <select class="form-select" name="status_funcionario" required>
+                                    <option value="1" <?= ($admin['status_funcionario'] == 1) ? 'selected' : ''; ?>>Ativo</option>
+                                    <option value="0" <?= ($admin['status_funcionario'] == 0) ? 'selected' : ''; ?>>Inativo</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="prefere_leite_vegetal" class="form-label">Prefere Leite Vegetal?</label>
-                                <select class="form-select" id="prefere_leite_vegetal" name="prefere_leite_vegetal" required>
-                                    <option value="Sim" <?= ($cliente['prefere_leite_vegetal'] == '1') ? 'selected' : ''; ?>>Sim</option>
-                                    <option value="Não" <?= ($cliente['prefere_leite_vegetal'] == '0') ? 'selected' : ''; ?>>Não</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="id_tipo_leite" class="form-label">Tipo de Leite</label>
-                                <select class="form-select" id="id_tipo_leite" name="id_tipo_leite" required>
-                                    <?php foreach ($tiposLeite as $tipoLeite): ?>
-                                        <option value="<?= $tipoLeite['id_tipo_leite']; ?>" <?= ($cliente['id_tipo_leite'] == $tipoLeite['id_tipo_leite']) ? 'selected' : ''; ?>>
-                                            <?= $tipoLeite['nome_tipo_leite']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="observacoes_cliente" class="form-label">Observações</label>
-                                <textarea class="form-control" id="observacoes_cliente" name="observacoes_cliente" rows="3"><?= $cliente['observacoes_cliente']; ?></textarea>
-                            </div>
                         </div>
 
                         <div class="mt-4 d-flex gap-2">
                             <button type="submit" class="btn btn-success">Salvar Alterações</button>
                             <button type="reset" class="btn btn-danger">Limpar Campos</button>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Card de perfil -->
+            <!-- FOTO DO PERFIL -->
             <div class="col-md-4">
                 <div class="card card-profile glass-card text-center p-3">
+
                     <?php
-                    $caminhoArquivo = BASE_URL . "uploads/" . $cliente['foto_cliente'];
-                    $img = BASE_URL . "uploads/sem-foto.jpg";
-                    if (!empty($cliente['foto_cliente'])) {
-                        $headers = @get_headers($caminhoArquivo);
-                        if ($headers && strpos($headers[0], '200') !== false) {
-                            $img = $caminhoArquivo;
-                        }
-                    }
+                    $foto = (!empty($admin['foto_funcionario'])) 
+                        ? BASE_URL . "uploads/" . $admin['foto_funcionario'] 
+                        : BASE_URL . "uploads/sem-foto.jpg";
                     ?>
-                    <div class="mb-3">
-                        <img id="preview-img" src="<?= $img ?>" alt="Foto Cliente" class="rounded-circle border" style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
-                        <input type="file" name="foto_cliente" id="foto_cliente" accept="image/*" style="display: none;">
-                    </div>
-                    <h5 class="mb-0"><?= $cliente['nome_cliente'] ?></h5>
+
+                    <img id="preview-img" src="<?= $foto ?>" class="rounded-circle border mb-3"
+                         style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
+
+                    <input type="file" id="foto_funcionario" name="foto_funcionario" accept="image/*" style="display:none;">
+
+                    <h5><?= $admin['nome_funcionario'] ?></h5>
                 </div>
             </div>
+
         </div>
     </div>
 </form>
+
 
 <!-- Scripts -->
 <script>
