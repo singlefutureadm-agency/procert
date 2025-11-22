@@ -6,7 +6,6 @@ class Cliente extends Model
 
     public function buscarCliente($email)
     {
-        
 
         $sql = "SELECT * FROM tbl_cliente WHERE email_cliente = :email AND status_cliente = 'Ativo'";
         $stmt = $this->db->prepare($sql);
@@ -51,44 +50,49 @@ class Cliente extends Model
     {
 
         $sql = " INSERT INTO tbl_cliente (
-                nome_cliente, 
-                tipo_cliente, 
-                data_nasc_cliente, 
-                email_cliente, 
-                senha_cliente, 
-                status_cliente, 
-                cpf_cnpj_cliente, 
-                foto_cliente, 
-                telefone_cliente, 
-                endereco_cliente, 
-                bairro_cliente, 
-                cidade_cliente, 
-                id_uf
+                    nome_cliente, 
+                    tipo_pessoa, 
+                    nasc_cliente, 
+                    email_cliente, 
+                    senha_cliente, 
+                    status_cliente, 
+                    cpf_cliente,
+                    cnpj_cliente,  
+                    telefone_cliente, 
+                    endereco_cliente, 
+                    bairro_cliente, 
+                    id_tipo_usuario, 
+                    cidade_cliente, 
+                    id_uf
                 ) VALUES (
-                :nome_cliente, 
-                :tipo_cliente, 
-                :data_nasc_cliente, 
-                :email_cliente, 
-                :senha_cliente, 
-                :status_cliente, 
-                :cpf_cnpj_cliente, 
-                :foto_cliente, 
-                :telefone_cliente, 
-                :endereco_cliente, 
-                :bairro_cliente, 
-                :cidade_cliente, 
-                :id_uf)";
+                    :nome_cliente, 
+                    :tipo_cliente, 
+                    :nasc_cliente, 
+                    :email_cliente, 
+                    :senha_cliente, 
+                    :status_cliente, 
+                    :cpf_cliente,
+                    :cnpj_cliente, 
+                    :telefone_cliente, 
+                    :endereco_cliente, 
+                    :bairro_cliente, 
+                    :id_tipo_usuario, 
+                    :cidade_cliente, 
+                    :id_uf
+                )";
+
 
         $stmt = $this->db->prepare($sql);
 
         $stmt->bindValue(':nome_cliente', $dados['nome_cliente']);
         $stmt->bindValue(':tipo_cliente', $dados['tipo_cliente']);
-        $stmt->bindValue(':data_nasc_cliente', $dados['nasc_cliente']);
+        $stmt->bindValue(':nasc_cliente', $dados['nasc_cliente']);
         $stmt->bindValue(':email_cliente', $dados['email_cliente']);
         $stmt->bindValue(':senha_cliente', $dados['senha_cliente']);
-        $stmt->bindValue(':status_cliente', $dados['status_cliente']);
-        $stmt->bindValue(':cpf_cnpj_cliente', $dados['cpf_cnpj_cliente']);
-        $stmt->bindValue(':foto_cliente', $dados['foto_cliente']);
+        $stmt->bindValue(':id_tipo_usuario', '3');
+        $stmt->bindValue(':status_cliente', 'Ativo');
+        $stmt->bindValue(':cpf_cliente', $dados['cpf_cliente']);
+        $stmt->bindValue(':cnpj_cliente', $dados['cnpj_cliente']);
         $stmt->bindValue(':telefone_cliente', $dados['telefone_cliente']);
         $stmt->bindValue(':endereco_cliente', $dados['endereco_cliente']);
         $stmt->bindValue(':bairro_cliente', $dados['bairro_cliente']);
@@ -151,15 +155,14 @@ class Cliente extends Model
 
     // 6 Método para add FOTO GALERIA 
 
-    public function addFotocliente($id_cliente, $arquivo, $nome_cliente)
+    public function addFotocliente($id_cliente, $arquivo)
     {
         $sql = "UPDATE tbl_cliente 
-           SET foto_cliente = :foto_cliente, alt_foto_cliente = :alt_foto_cliente 
+           SET foto_cliente = :foto_cliente 
            WHERE id_cliente = :id_cliente";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':foto_cliente', $arquivo);
-        $stmt->bindValue(':alt_foto_cliente', $nome_cliente);
         $stmt->bindValue(':id_cliente', $id_cliente);
 
         return $stmt->execute();

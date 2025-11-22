@@ -1,16 +1,3 @@
-Conversation opened. 1 unread message.
-
-Skip to content
-Using Gmail with screen readers
-Enable desktop notifications for Gmail.
-   OK  No thanks
-1 of 3,598
-Colar em core> model.php
-Inbox
-
-Miguel Cezar Ferreira
-12:26 AM (0 minutes ago)
-to me
 
 <?php
 
