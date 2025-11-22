@@ -299,6 +299,35 @@ class ClientesController extends Controller
     }
 
 
+   public function desativar($id)
+{
+    $resp = $this->clienteModel->desativarCliente($id);
+
+    header('Content-Type: application/json');
+
+    if ($resp) {
+        echo json_encode(['sucesso' => true]);
+    } else {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao desativar cliente']);
+    }
+
+    exit;
+}
+
+public function ativar($id)
+{
+    $resp = $this->clienteModel->ativarCliente($id);
+
+    header('Content-Type: application/json');
+
+    if ($resp) {
+        echo json_encode(['sucesso' => true]);
+    } else {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao ativar cliente']);
+    }
+
+    exit;
+}
 
 
 

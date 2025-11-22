@@ -198,4 +198,31 @@ public function updateCliente($id, $dados) {
     }
 
 
+
+
+
+   // Desativar Cliente 
+    public function desativarCliente($id)
+    {
+
+        $sql = "UPDATE tbl_cliente SET status_cliente = 'Inativo'  WHERE id_cliente = :id_cliente ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id_cliente', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+// Desativar Cliente 
+    public function ativarCliente($id)
+    {
+
+        $sql = "UPDATE tbl_cliente SET status_cliente = 'Ativo'  WHERE id_cliente = :id_cliente ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id_cliente', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+
+
+
+
 }
