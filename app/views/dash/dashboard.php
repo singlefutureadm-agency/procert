@@ -19,13 +19,13 @@
   <!-- Skip links will be dynamically added by accessibility.js -->
   <meta name="supported-color-schemes" content="light dark" />
   <link rel="preload" href="<?= BASE_URL ?>assets/css/adminlte.css" as="style" />
-    <link href="http://localhost/procert/public/assets/img/logo.png" rel="icon">
+  <link href="http://localhost/procert/public/assets/img/logo.png" rel="icon">
   <!--end::Accessibility Features-->
   <!--begin::Fonts-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
     integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" media="print"
     onload="this.media='all'" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!--end::Fonts-->
   <!--begin::Third Party Plugin(OverlayScrollbars)-->
@@ -49,7 +49,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary" >
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
   <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <!--begin::Header-->
@@ -76,7 +76,7 @@
               <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i>
             </a>
           </li>
-          
+
         </ul>
       </div>
 
@@ -88,7 +88,7 @@
 
       <div class="sidebar-brand">
         <a href="http://localhost/procert/public" class="brand-link">
-  
+
           <span class="brand-text fw-light">Procert</span>
         </a>
       </div>
@@ -98,8 +98,8 @@
           <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
 
             <!-- ======================= CLIENTE ======================= -->
-            <li class="nav-item">
-              <a href="<?= BASE_URL ?>clientes/listar" class="nav-link">
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-person"></i>
                 <p>
                   Cliente
@@ -109,19 +109,25 @@
 
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="./cliente/cadastrar" class="nav-link">
+                  <a href="<?= BASE_URL ?>clientes/adicionar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Cadastrar</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="./cliente/editar" class="nav-link">
+                  <a href="<?= BASE_URL ?>clientes/listar" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Listar</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?= BASE_URL ?>clientes/editar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Editar</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="./cliente/inativos" class="nav-link">
+                  <a href="<?= BASE_URL ?>cliente/inativos" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Inativos</p>
                   </a>
@@ -130,7 +136,7 @@
             </li>
 
             <!-- ======================= FUNCIONÁRIO ======================= -->
-            <li class="nav-item">
+            <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-people"></i>
                 <p>
@@ -139,33 +145,23 @@
                 </p>
               </a>
 
-                <!-- ======================= ADMINISTRADOR ======================= -->
-            <li class="nav-item">
-              <a href="<?= BASE_URL ?>administrador/listar" class="nav-link">
-                <i class="nav-icon bi bi-people"></i>
-                <p>
-                  Administrador
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-
-              
-
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="./funcionario/cadastrar" class="nav-link">
+                  <a href="<?= BASE_URL ?>funcionario/cadastrar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Cadastrar</p>
                   </a>
                 </li>
+
                 <li class="nav-item">
-                  <a href="./funcionario/editar" class="nav-link">
+                  <a href="<?= BASE_URL ?>funcionario/editar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Editar</p>
                   </a>
                 </li>
+
                 <li class="nav-item">
-                  <a href="./funcionario/inativos" class="nav-link">
+                  <a href="<?= BASE_URL ?>funcionario/inativos" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Inativos</p>
                   </a>
@@ -173,8 +169,16 @@
               </ul>
             </li>
 
-            <!-- ======================= SERVIÇOS ======================= -->
+            <!-- ======================= ADMINISTRADOR ======================= -->
             <li class="nav-item">
+              <a href="<?= BASE_URL ?>administrador/listar" class="nav-link">
+                <i class="nav-icon bi bi-person-badge"></i>
+                <p>Administrador</p>
+              </a>
+            </li>
+
+            <!-- ======================= SERVIÇOS ======================= -->
+            <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-briefcase"></i>
                 <p>
@@ -185,19 +189,21 @@
 
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="./servicos/cadastrar" class="nav-link">
+                  <a href="<?= BASE_URL ?>servicos/cadastrar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Cadastrar</p>
                   </a>
                 </li>
+
                 <li class="nav-item">
-                  <a href="./servicos/editar" class="nav-link">
+                  <a href="<?= BASE_URL ?>servicos/editar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Editar</p>
                   </a>
                 </li>
+
                 <li class="nav-item">
-                  <a href="./servicos/inativos" class="nav-link">
+                  <a href="<?= BASE_URL ?>servicos/inativos" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Inativos</p>
                   </a>
@@ -213,7 +219,7 @@
 
 
     <!--begin::App Main-->
-    <main class="app-main" >
+    <main class="app-main">
       <!--begin::App Content Header-->
       <div class="app-content-header">
         <!--begin::Container-->
@@ -332,16 +338,16 @@
           <!--end::Row-->
           <!--begin::Row-->
           <div class="row">
-               <?php
+            <?php
 
-                        if(isset($conteudo)){
-                            $this->carregarViews($conteudo, $dados);
-                        }else{
-                            echo ' <h2> Bem-vindo ao Dashboard! </h2>';
-                        }
+            if (isset($conteudo)) {
+              $this->carregarViews($conteudo, $dados);
+            } else {
+              echo ' <h2> Bem-vindo ao Dashboard! </h2>';
+            }
 
 
-                        ?>
+            ?>
           </div>
           <!-- /.row (main row) -->
         </div>
@@ -385,7 +391,7 @@
       scrollbarAutoHide: 'leave',
       scrollbarClickScroll: true,
     };
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
       if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
         OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
@@ -424,8 +430,7 @@
     // ++++++++++++++++++++++++++++++++++++++++++
 
     const sales_chart_options = {
-      series: [
-        {
+      series: [{
           name: 'Digital Goods',
           data: [28, 48, 40, 19, 86, 27, 90],
         },
@@ -491,11 +496,9 @@
 
     // Sparkline charts
     const option_sparkline1 = {
-      series: [
-        {
-          data: [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021],
-        },
-      ],
+      series: [{
+        data: [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021],
+      }, ],
       chart: {
         type: 'area',
         height: 50,
@@ -519,11 +522,9 @@
     sparkline1.render();
 
     const option_sparkline2 = {
-      series: [
-        {
-          data: [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921],
-        },
-      ],
+      series: [{
+        data: [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921],
+      }, ],
       chart: {
         type: 'area',
         height: 50,
@@ -547,11 +548,9 @@
     sparkline2.render();
 
     const option_sparkline3 = {
-      series: [
-        {
-          data: [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21],
-        },
-      ],
+      series: [{
+        data: [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21],
+      }, ],
       chart: {
         type: 'area',
         height: 50,
