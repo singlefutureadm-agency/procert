@@ -38,12 +38,43 @@
               </div>
 
               <!-- Senha -->
+              <!-- Senha -->
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="senha_cliente" class="form-control-label">Senha</label>
-                  <input class="form-control" type="password" id="senha_cliente" name="senha_cliente" required>
+
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      type="password"
+                      id="senha_cliente"
+                      name="senha_cliente"
+                     
+                      required>
+
+                    <span class="input-group-text" id="toggleSenha" style="cursor: pointer;">
+                      <i class="bi bi-eye" id="iconSenha"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
+
+              <script>
+                document.getElementById('toggleSenha').addEventListener('click', function() {
+                  const input = document.getElementById('senha_cliente');
+                  const icon = document.getElementById('iconSenha');
+
+                  if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("bi-eye");
+                    icon.classList.add("bi-eye-slash");
+                  } else {
+                    input.type = "password";
+                    icon.classList.remove("bi-eye-slash");
+                    icon.classList.add("bi-eye");
+                  }
+                });
+              </script>
 
               <!-- Data de Nascimento -->
               <div class="col-md-6">

@@ -48,11 +48,11 @@ class ClientesController extends Controller
         }
     }
 
-   // 2- Método para adicionar Alunos
+    // 2- Método para adicionar Alunos
     public function adicionar()
     {
 
-    
+
         $dados = array();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -64,6 +64,7 @@ class ClientesController extends Controller
             $senha_cliente                  = filter_input(INPUT_POST, 'senha_cliente', FILTER_SANITIZE_NUMBER_FLOAT);
             $cpf_cliente                    = filter_input(INPUT_POST, 'cpf_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
             $cnpj_cliente                   = filter_input(INPUT_POST, 'cnpj_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cep_cliente                    = filter_input(INPUT_POST, 'cep_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
             $status_cliente                 = filter_input(INPUT_POST, 'status_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
             $telefone_cliente               = filter_input(INPUT_POST, 'telefone_cliente', FILTER_SANITIZE_NUMBER_INT);
             $endereco_cliente               = filter_input(INPUT_POST, 'endereco_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -86,6 +87,7 @@ class ClientesController extends Controller
                     'foto_cliente'                => $foto_cliente,
                     'cnpj_cliente'                => $cnpj_cliente,
                     'cpf_cliente'                 => $cpf_cliente,
+                    'cep_cliente'                 => $cep_cliente,
                     'email_cliente'               => $email_cliente,
                     'nasc_cliente'                => $nasc_cliente,
                     'senha_cliente'               => $senha_cliente,
@@ -175,7 +177,7 @@ class ClientesController extends Controller
     public function editar($id = null)
     {
 
-    
+
         $dados = array();
 
 
@@ -183,83 +185,84 @@ class ClientesController extends Controller
             header('Location: http://localhost/procert/public/clientes/listar');
             exit;
         }
-    
+
 
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $email_cliente                  = filter_input(INPUT_POST, 'email_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $nome_cliente                   = filter_input(INPUT_POST, 'nome_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $foto_cliente                   = filter_input(INPUT_POST, 'foto_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $nasc_cliente                   = filter_input(INPUT_POST, 'nasc_cliente', FILTER_SANITIZE_NUMBER_FLOAT);
-            $senha_cliente                  = filter_input(INPUT_POST, 'senha_cliente', FILTER_SANITIZE_NUMBER_FLOAT);
-            $cpf_cliente                    = filter_input(INPUT_POST, 'cpf_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $cnpj_cliente                   = filter_input(INPUT_POST, 'cnpj_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $status_cliente                 = filter_input(INPUT_POST, 'status_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $telefone_cliente               = filter_input(INPUT_POST, 'telefone_cliente', FILTER_SANITIZE_NUMBER_INT);
-            $endereco_cliente               = filter_input(INPUT_POST, 'endereco_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $bairro_cliente                 = filter_input(INPUT_POST, 'bairro_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $cidade_cliente                 = filter_input(INPUT_POST, 'cidade_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $tipo_cliente                   = filter_input(INPUT_POST, 'tipo_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
-            $id_uf                          = filter_input(INPUT_POST, 'id_uf', FILTER_SANITIZE_SPECIAL_CHARS);
+            // Sanitização
+            $email_cliente      = filter_input(INPUT_POST, 'email_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $nome_cliente       = filter_input(INPUT_POST, 'nome_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $foto_cliente       = filter_input(INPUT_POST, 'foto_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $nasc_cliente       = filter_input(INPUT_POST, 'nasc_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $senha_cliente      = filter_input(INPUT_POST, 'senha_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cpf_cliente        = filter_input(INPUT_POST, 'cpf_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cep_cliente        = filter_input(INPUT_POST, 'cep_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cnpj_cliente       = filter_input(INPUT_POST, 'cnpj_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $status_cliente     = filter_input(INPUT_POST, 'status_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $telefone_cliente   = filter_input(INPUT_POST, 'telefone_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $endereco_cliente   = filter_input(INPUT_POST, 'endereco_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $bairro_cliente     = filter_input(INPUT_POST, 'bairro_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cidade_cliente     = filter_input(INPUT_POST, 'cidade_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $tipo_cliente       = filter_input(INPUT_POST, 'tipo_cliente', FILTER_SANITIZE_SPECIAL_CHARS);
+            $id_uf              = filter_input(INPUT_POST, 'id_uf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 
-            $cliente = $this->clienteModel->getclienteById($id);
-            $foto_cliente = $cliente['foto_cliente']; 
+            // Foto do cliente já existente
+            $clienteAtual = $this->clienteModel->getclienteById($id);
+            $foto_cliente = $clienteAtual['foto_cliente'];
 
-            if (isset($_FILES['foto_cliente']) && $_FILES['foto_cliente']['error'] == 0) {
-                $arquivo = $this->uploadFoto($_FILES['foto_cliente']);
-                if ($arquivo) {
-                    $foto_cliente = $arquivo; 
-                }
+            // Upload da foto (se houver)
+              if (isset($_FILES['foto_cliente']) && $_FILES['foto_cliente']['error'] == 0) {
+
+
+                        $arquivo = $this->uploadFoto($_FILES['foto_cliente']);
+
+
+                        if ($arquivo) {
+                            //Inserir na galeria
+
+                            $this->clienteModel->addFotocliente($id, $arquivo);
+                        } else {
+                            //Definir uma mensagem informando que não pode ser salva
+                        }
+                    }
+
+
+            
+            // Montar dados para update
+            $dadoscliente = [
+                'nome_cliente'      => $nome_cliente,
+                'foto_cliente'      => $foto_cliente,
+                'cnpj_cliente'      => $cnpj_cliente,
+                'cpf_cliente'       => $cpf_cliente,
+                'cep_cliente'       => $cep_cliente,
+                'email_cliente'     => $email_cliente,
+                'nasc_cliente'      => $nasc_cliente,
+                'senha_cliente'     => $senha_cliente,
+                'status_cliente'    => $status_cliente,
+                'telefone_cliente'  => $telefone_cliente,
+                'endereco_cliente'  => $endereco_cliente,
+                'bairro_cliente'    => $bairro_cliente,
+                'cidade_cliente'    => $cidade_cliente,
+                'tipo_cliente'      => $tipo_cliente,
+                'id_uf'             => $id_uf
+            ];
+
+            // Chamar update correto
+            $resposta = $this->clienteModel->updateCliente($id, $dadoscliente);
+
+            if (isset($resposta['erro'])) {
+                $_SESSION['error'] = $resposta['erro'];
+                header("Location: /clientes/editar/$id");
+                exit;
             }
-    
 
-
-            if ($nome_cliente && $email_cliente && $senha_cliente !== false) {
-
-
-                // 3 Preparar Dados 
-
-                $dadoscliente = array(
-
-                    'nome_cliente'                => $nome_cliente,
-                    'foto_cliente'                => $foto_cliente,
-                    'cnpj_cliente'                => $cnpj_cliente,
-                    'cpf_cliente'                 => $cpf_cliente,
-                    'email_cliente'               => $email_cliente,
-                    'nasc_cliente'                => $nasc_cliente,
-                    'senha_cliente'               => $senha_cliente,
-                    'status_cliente'              => $status_cliente,
-                    'telefone_cliente'            => $telefone_cliente,
-                    'endereco_cliente'            => $endereco_cliente,
-                    'bairro_cliente'              => $bairro_cliente,
-                    'cidade_cliente'              => $cidade_cliente,
-                    'tipo_cliente'                => $tipo_cliente,
-                    'id_uf'                       => $id_uf,
-
-                );
-
-                // 4 Inserir cliente
-
-                $id_cliente = $this->clienteModel->addCliente($dadoscliente);
-
-                if ($this->clienteModel->updateCliente($id, $dadoscliente)) {
-                    $_SESSION['mensagem'] = "Cliente atualizado com sucesso!";
-                    $_SESSION['tipo-msg'] = "sucesso";
-                    header('Location: http://localhost/procert/public/clientes/listar');
-                    exit;
-                } else {
-                    $dados['mensagem'] = "Erro ao atualizar cliente";
-                    $dados['tipo-msg'] = "erro";
-                }
-
-                
-            } else {
-                $dados['mensagem'] = "Preencha todos os campos obrigatórios";
-                $dados['tipo-msg'] = "erro";
-            }
+            $_SESSION['mensagem'] = "Cliente atualizado com sucesso!";
+            $_SESSION['tipo-msg'] = "sucesso";
+            header('Location: http://localhost/procert/public/clientes/listar');
+            exit;
         }
 
 
@@ -275,7 +278,7 @@ class ClientesController extends Controller
         $dados['clientes'] = $this->clienteModel->getclienteById($id);
 
 
-        $dados['conteudo'] = 'dash/cliente/adicionar';
+        $dados['conteudo'] = 'dash/cliente/editar';
         $dados['func'] = $dadosFunc;
 
         if ($_SESSION['id_tipo_usuario'] == '1') {
@@ -283,14 +286,14 @@ class ClientesController extends Controller
             $dadosFunc = $func->buscarfuncionario($_SESSION['userEmail']);
             $dados['func'] = $dadosFunc;
 
-            $dados['conteudo'] = 'dash/cliente/adicionar';
+            $dados['conteudo'] = 'dash/cliente/editar';
             $this->carregarViews('dash/dashboard', $dados);
         } else if ($_SESSION['id_tipo_usuario'] == '2') {
             $func = new Funcionario();
             $dadosFunc = $func->buscarfuncionario($_SESSION['userEmail']);
             $dados['func'] = $dadosFunc;
 
-            $dados['conteudo'] = 'dash/cliente/adicionar';
+            $dados['conteudo'] = 'dash/cliente/editar';
             $this->carregarViews('dash/dashboard-funcionario', $dados);
         }
     }
@@ -299,7 +302,7 @@ class ClientesController extends Controller
 
 
 
- private function uploadFoto($file)
+    private function uploadFoto($file)
     {
 
         // var_dump($file);
@@ -318,7 +321,4 @@ class ClientesController extends Controller
         }
         return false;
     }
-
-
-
 }

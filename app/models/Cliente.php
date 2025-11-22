@@ -44,8 +44,8 @@ class Cliente extends Model
     }
 
 
-    //  METODO DASHBOARD ADICONAR Curso 
-
+    
+    
     public function addCliente($dados)
     {
 
@@ -58,6 +58,7 @@ class Cliente extends Model
                     status_cliente, 
                     cpf_cliente,
                     cnpj_cliente,  
+                    cep_cliente,  
                     telefone_cliente, 
                     endereco_cliente, 
                     bairro_cliente, 
@@ -73,6 +74,7 @@ class Cliente extends Model
                     :status_cliente, 
                     :cpf_cliente,
                     :cnpj_cliente, 
+                    :cep_cliente, 
                     :telefone_cliente, 
                     :endereco_cliente, 
                     :bairro_cliente, 
@@ -93,6 +95,7 @@ class Cliente extends Model
         $stmt->bindValue(':status_cliente', 'Ativo');
         $stmt->bindValue(':cpf_cliente', $dados['cpf_cliente']);
         $stmt->bindValue(':cnpj_cliente', $dados['cnpj_cliente']);
+        $stmt->bindValue(':cep_cliente', $dados['cep_cliente']);
         $stmt->bindValue(':telefone_cliente', $dados['telefone_cliente']);
         $stmt->bindValue(':endereco_cliente', $dados['endereco_cliente']);
         $stmt->bindValue(':bairro_cliente', $dados['bairro_cliente']);
@@ -103,42 +106,68 @@ class Cliente extends Model
         return $this->db->lastInsertId();
     }
 
-    public function updateCliente($id, $dados) {
-        $sql = "UPDATE tbl_cliente SET 
-                nome_cliente = :nome_cliente, 
-                tipo_cliente = :tipo_cliente, 
-                data_nasc_cliente = :data_nasc_cliente, 
-                email_cliente = :email_cliente, 
-                senha_cliente = :senha_cliente, 
-                status_cliente = :status_cliente, 
-                cpf_cnpj_cliente = :cpf_cnpj_cliente, 
-                foto_cliente = :foto_cliente, 
-                telefone_cliente = :telefone_cliente, 
-                endereco_cliente = :endereco_cliente, 
-                bairro_cliente = :bairro_cliente, 
-                cidade_cliente = :cidade_cliente, 
-                id_uf = :id_uf 
-                WHERE id_cliente = :id_cliente";
-    
-        $stmt = $this->db->prepare($sql);
-    
-        $stmt->bindValue(':nome_cliente', $dados['nome_cliente']);
-        $stmt->bindValue(':tipo_cliente', $dados['tipo_cliente']);
-        $stmt->bindValue(':data_nasc_cliente', $dados['nasc_cliente']);
-        $stmt->bindValue(':email_cliente', $dados['email_cliente']);
-        $stmt->bindValue(':senha_cliente', $dados['senha_cliente']);
-        $stmt->bindValue(':status_cliente', $dados['status_cliente']);
-        $stmt->bindValue(':cpf_cnpj_cliente', $dados['cpf_cnpj_cliente']);
-        $stmt->bindValue(':foto_cliente', $dados['foto_cliente']);
-        $stmt->bindValue(':telefone_cliente', $dados['telefone_cliente']);
-        $stmt->bindValue(':endereco_cliente', $dados['endereco_cliente']);
-        $stmt->bindValue(':bairro_cliente', $dados['bairro_cliente']);
-        $stmt->bindValue(':cidade_cliente', $dados['cidade_cliente']);
-        $stmt->bindValue(':id_uf', $dados['id_uf']);
-        $stmt->bindValue(':id_cliente', $id);
-    
-        return $stmt->execute();
+        private function emailExisteUpdate($email, $id_cliente) {
+            $sql = "SELECT COUNT(*) as total 
+                    FROM tbl_cliente 
+                    WHERE email_cliente = :email 
+                    AND id_cliente != :id";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':email', $email);
+            $stmt->bindValue(':id', $id_cliente);
+            $stmt->execute();
+
+            $r = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $r['total'] > 0;
+        }
+
+
+public function updateCliente($id, $dados) {
+
+    // 1. Verifica se o email já existe em outro cliente
+    if ($this->emailExisteUpdate($dados['email_cliente'], $id)) {
+        return ['erro' => 'O e-mail informado já está em uso por outro cliente.'];
     }
+
+    // 2. Atualiza normalmente
+    $sql = "UPDATE tbl_cliente SET
+            nome_cliente      = :nome_cliente,
+            tipo_pessoa       = :tipo_cliente,
+            nasc_cliente      = :nasc_cliente,
+            email_cliente     = :email_cliente,
+            senha_cliente     = :senha_cliente,
+            cpf_cliente       = :cpf_cliente,
+            cnpj_cliente      = :cnpj_cliente,
+            cep_cliente       = :cep_cliente,
+            telefone_cliente  = :telefone_cliente,
+            endereco_cliente  = :endereco_cliente,
+            bairro_cliente    = :bairro_cliente,
+            cidade_cliente    = :cidade_cliente,
+            id_uf             = :id_uf
+        WHERE id_cliente = :id_cliente";
+
+    $stmt = $this->db->prepare($sql);
+
+    $stmt->bindValue(':nome_cliente', $dados['nome_cliente']);
+    $stmt->bindValue(':tipo_cliente', $dados['tipo_cliente']);
+    $stmt->bindValue(':nasc_cliente', $dados['nasc_cliente']);
+    $stmt->bindValue(':email_cliente', $dados['email_cliente']);
+    $stmt->bindValue(':senha_cliente', $dados['senha_cliente']);
+    $stmt->bindValue(':cpf_cliente', $dados['cpf_cliente']);
+    $stmt->bindValue(':cnpj_cliente', $dados['cnpj_cliente']);
+    $stmt->bindValue(':cep_cliente', $dados['cep_cliente']);
+    $stmt->bindValue(':telefone_cliente', $dados['telefone_cliente']);
+    $stmt->bindValue(':endereco_cliente', $dados['endereco_cliente']);
+    $stmt->bindValue(':bairro_cliente', $dados['bairro_cliente']);
+    $stmt->bindValue(':cidade_cliente', $dados['cidade_cliente']);
+    $stmt->bindValue(':id_uf', $dados['id_uf']);
+    $stmt->bindValue(':id_cliente', $id);
+
+    $stmt->execute();
+
+    return true;
+}
+
     
     public function getclienteById($id)
     {
