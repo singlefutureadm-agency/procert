@@ -47,7 +47,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary" >
   <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <!--begin::Header-->
@@ -85,9 +85,9 @@
     <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
 
       <div class="sidebar-brand">
-        <a href="./index.html" class="brand-link">
-          <img src="./assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-          <span class="brand-text fw-light">AdminLTE 4</span>
+        <a href="http://localhost/procert/public" class="brand-link">
+  
+          <span class="brand-text fw-light">Procert</span>
         </a>
       </div>
 
@@ -97,7 +97,7 @@
 
             <!-- ======================= CLIENTE ======================= -->
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="<?= BASE_URL ?>clientes/listar" class="nav-link">
                 <i class="nav-icon bi bi-person"></i>
                 <p>
                   Cliente
@@ -199,7 +199,7 @@
 
 
     <!--begin::App Main-->
-    <main class="app-main">
+    <main class="app-main" >
       <!--begin::App Content Header-->
       <div class="app-content-header">
         <!--begin::Container-->

@@ -8964,7 +8964,7 @@ textarea.form-control-lg {
 
 .bg-body {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important;
+    
 }
 
 .bg-transparent {
@@ -13812,7 +13812,7 @@ body:not(.app-loaded) .app-footer {
 .app-main .app-content-top-area,
 .app-main .app-content-bottom-area {
   color: var(--bs-secondary-color);
-  background-color: var(--bs-body-bg);
+ 
 }
 .app-main .app-content-top-area {
   padding: 1rem 0;

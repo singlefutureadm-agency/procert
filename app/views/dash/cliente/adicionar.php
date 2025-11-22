@@ -1,250 +1,136 @@
-<form method="POST" action="https://agenciatipi02.smpsistema.com.br/devcycle/exfe/public/clientes/adicionar" enctype="multipart/form-data">
-  <div class="container-fluid py-4">
-    <div class="row">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header pb-0">
-            <div class="d-flex align-items-center">
-              <p class="mb-0">Editar Perfil</p>
-              <button class="btn btn-primary btn-sm ms-auto">Segurança</button>
+<form method="POST"  id="form-cliente" action="http://localhost/kioficina/public/clientes/adicionar" enctype="multipart/form-data">
+    <div class="container my-5">
+      <div class="row">
+        <!-- Coluna para imagem -->
+        <div class="col-md-4 text-center mb-4">
+          <img src="http://localhost/kioficina/public/uploads/sem-foto-servico.png" alt="kioficina Logo" class="img-fluid" id="preview-img" style="width: 100%; cursor: pointer; border-radius: 12px;">
+          <input type="file" name="foto_cliente" id="foto_cliente" style="display: none;" accept="image/*">
+        </div>
+
+        <!-- Coluna para os campos do formulário -->
+        <div class="col-md-8">
+          <div class="row">
+            <!-- Nome -->
+            <div class="col-md-6 mb-3">
+              <label for="nome_cliente" class="form-label">Nome do cliente:</label>
+              <input type="text" class="form-control" id="nome_cliente" name="nome_cliente" placeholder="Digite o nome do cliente" required>
             </div>
+
+          
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+              <label for="email_cliente" class="form-label">Email:</label>
+              <input type="email" class="form-control" id="email_cliente" name="email_cliente" placeholder="exemplo@email.com" required>
+            </div>
+             <!-- Data de Nascimento -->
+             <div class="col-md-6 mb-3">
+              <label for="nasc_cliente" class="form-label">Data de Nascimento:</label>
+              <input type="date" class="form-control" id="nasc_cliente" name="nasc_cliente" required>
+            </div>
+
+            <!-- Senha -->
+            <div class="col-md-6 mb-3">
+              <label for="senha_cliente" class="form-label">Senha:</label>
+              <input type="password" class="form-control" id="senha_cliente" name="senha_cliente" required>
+            </div>
+
+            <!-- CPF/CNPJ -->
+            <div class="col-md-6 mb-3">
+              <label for="cpf_cnpj_cliente" class="form-label">CPF ou CNPJ:</label>
+              <input type="text" class="form-control" id="cpf_cnpj_cliente" name="cpf_cnpj_cliente" required>
+            </div>
+
+            <!-- tipo -->
+            <div class="col-md-6 mb-3">
+              <label for="status_cliente" class="form-label">Status cliente:</label>
+              <select class="form-select" id="status_cliente" name="status_cliente">
+                <option selected>Ativo</option>
+                <option>Inativo</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="tipo_cliente" class="form-label">tipo cliente:</label>
+              <select class="form-select" id="tipo_cliente" name="tipo_cliente">
+                <option selected value="Pessoa fisica">Pessoa fisica</option>
+                <option value="Pessoa Juridica">Pessoa Juridica</option>
+              </select>
+            </div>
+
+
+            <!-- Telefone -->
+            <div class="col-md-6 mb-3">
+              <label for="telefone_cliente" class="form-label">Telefone:</label>
+              <input type="tel" class="form-control" id="telefone_cliente" name="telefone_cliente" placeholder="(XX) XXXXX-XXXX">
+            </div>
+
+
+            
+            <!-- Endereço -->
+            <div class="col-md-6 mb-3">
+              <label for="endereco_cliente" class="form-label">Endereço:</label>
+              <input type="text" class="form-control" id="endereco_cliente" name="endereco_cliente" required>
+            </div>
+
+            <!-- Bairro -->
+            <div class="col-md-6 mb-3">
+              <label for="bairro_cliente" class="form-label">Bairro:</label>
+              <input type="text" class="form-control" id="bairro_cliente" name="bairro_cliente" required>
+            </div>
+
+            <!-- Cidade -->
+            <div class="col-md-6 mb-3">
+              <label for="cidade_cliente" class="form-label">Cidade:</label>
+              <input type="text" class="form-control" id="cidade_cliente" name="cidade_cliente" required>
+            </div>
+
           </div>
 
-          <div class="card-body">
-            <p class="text-uppercase text-sm">Informações Pessoais</p>
-            <div class="row">
-              <!-- Nome completo -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="nome_cliente" class="form-control-label">Nome Completo</label>
-                  <input class="form-control" type="text" id="nome_cliente" name="nome_cliente">
-                </div>
-              </div>
-
-              <!-- Email -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="email_cliente" class="form-control-label">Email</label>
-                  <input class="form-control" type="email" id="email_cliente" name="email_cliente">
-                </div>
-              </div>
-
-              <!-- Senha -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="senha_cliente" class="form-control-label">Senha</label>
-                  <div class="input-group">
-                    <input class="form-control" type="password" id="senha_cliente" name="senha_cliente">
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-outline-secondary" id="show-password-btn" onclick="togglePasswordVisibility()">
-                        <i id="icon-password" class="fas fa-eye"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <script>
-                function togglePasswordVisibility() {
-                  const passwordInput = document.getElementById('senha_cliente');
-                  const btn = document.getElementById('show-password-btn');
-                  const icon = document.getElementById('icon-password');
-                  if (passwordInput.type === "password") {
-                    passwordInput.type = "text";
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                  } else {
-                    passwordInput.type = "password";
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                  }
-                }
-              </script>
-
-              <!-- Data de Nascimento -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="nasc_cliente" class="form-control-label">Data de Nascimento</label>
-                  <input class="form-control" type="date" id="nasc_cliente" name="nasc_cliente">
-                </div>
-              </div>
-            </div>
-
-            <hr class="horizontal dark">
-            <p class="text-uppercase text-sm">Preferências de Café</p>
-            <div class="row">
-              <!-- Tipo de Café -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="id_produto" class="form-control-label">Tipo de Café</label>
-                  <select class="form-control" id="id_produto" name="id_produto" required>
-                    <option selected> Selecione um produto </option>
-                    <?php
-                    if (!empty($produtos)) {
-                      foreach ($produtos as $produto): ?>
-
-                        <option value="<?= $produto['id_produto']; ?>">
-                          <?= $produto['nome_produto']; ?>
-                        </option>
-                    <?php endforeach;
-                    } else {
-                      echo "<option value=''>Nenhum produto encontrado</option>";
-                    }
-                    ?>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Intensidade -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="id_intensidade" class="form-control-label">Intensidade</label>
-                  <select class="form-control" id="id_intensidade" name="id_intensidade" required>
-                    <option selected> Selecione um Intensidade </option>
-                    <?php
-                    if (!empty($intensidades)) {
-                      foreach ($intensidades as $intensidade): ?>
-
-                        <option value="<?= $intensidade['id_intensidade']; ?>">
-                          <?= $intensidade['nivel_intensidade']; ?>
-                        </option>
-                    <?php endforeach;
-                    } else {
-                      echo "<option value=''>Nenhuma intensidade encontrada</option>";
-                    }
-                    ?>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Acompanhamento -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="id_acompanhamento" class="form-control-label">Acompanhamento</label>
-                  <select class="form-control" id="id_acompanhamento" name="id_acompanhamento" required>
-                    <option selected> Selecione um Acompanhamento</option>
-                    <?php
-                    if (!empty($acompanhamentos)) {
-                      foreach ($acompanhamentos as $acompanhamento): ?>
-
-                        <option value="<?= $acompanhamento['id_acompanhamento']; ?>">
-                          <?= $acompanhamento['nome_acompanhamento']; ?>
-                        </option>
-                    <?php endforeach;
-                    } else {
-                      echo "<option value=''>Nenhum acompanhamento encontrado</option>";
-                    }
-                    ?>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Prefere leite vegetal -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="prefere_leite_vegetal" class="form-control-label">Prefere Leite Vegetal?</label>
-                  <select class="form-control" id="prefere_leite_vegetal" name="prefere_leite_vegetal" required>
-                    <option selected> Selecione </option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Tipo de leite -->
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="id_tipo_leite" class="form-control-label">Tipo de Leite</label>
-                  <select class="form-control" id="id_tipo_leite" name="id_tipo_leite" required>
-                    <option selected> Selecione </option>
-                    <?php
-                    if (!empty($tiposLeite)) {
-                      foreach ($tiposLeite as $tipoLeite): ?>
-                        <option value="<?= $tipoLeite['id_tipo_leite']; ?>">
-                          <?= $tipoLeite['nome_tipo_leite']; ?>
-                        </option>
-                    <?php endforeach;
-                    } else {
-                      echo "<option value=''>Nenhum tipo de leite encontrado</option>";
-                    }
-                    ?>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Observações -->
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="observacoes_cliente" class="form-control-label">Observações</label>
-                  <textarea class="form-control" id="observacoes_cliente" name="observacoes_cliente" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- Botões -->
-            <div class="row">
-              <div class="col-12">
-                <button type="submit" class="btn btn-success btn-sm">Salvar Alterações</button>
-                <button type="reset" class="btn btn-danger btn-sm">Limpar Campos</button>
-              </div>
-            </div>
+          <!-- Botões -->
+          <div class="mt-4 d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
           </div>
         </div>
       </div>
-
-      <!-- Perfil lateral -->
-      <div class="col-md-4">
-        <div class="card card-profile">
-          <div class="row justify-content-center">
-            <div class="col-4 col-lg-4 order-lg-2">
-              <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                <a href="javascript:;">
-                  <div class="image-container" style="width: 100%; max-width: 200px; aspect-ratio: 1/1; overflow: hidden; border-radius: 50%; ">
-
-
-                    <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
-                      <div class="image-container" style="width: 100%; max-width: 200px; aspect-ratio: 1/1; overflow: hidden; border-radius: 50%; margin: auto;">
-                        <img src="https://agenciatipi02.smpsistema.com.br/devcycle/exfe/public/assets/img/hero-bg2.png" alt="exfe Logo" class="img-fluid" id="preview-img" style="cursor:pointer; border-radius:12px;">
-                      </div>
-                      <input type="file" name="foto_cliente" id="foto_cliente" style="display: none;" accept="image/*">
-                    </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-body pt-0">
-            <div class="text-center mt-4">
-              <h5>
-                
-              </h5>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</form>
+  </form>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+
     const visualizarImg = document.getElementById('preview-img');
+
     const arquivo = document.getElementById('foto_cliente');
 
     visualizarImg.addEventListener('click', function() {
-      arquivo.click();
+      arquivo.click()
+
     });
+
 
     arquivo.addEventListener('change', function() {
       if (arquivo.files && arquivo.files[0]) {
+
         let render = new FileReader();
         render.onload = function(e) {
-          visualizarImg.src = e.target.result;
-        };
+          visualizarImg.src = e.target.result
+        }
+
         render.readAsDataURL(arquivo.files[0]);
+
       }
     });
+
   });
+
+ // Seleciona o botão e o formulário
+ const btnCancelar = document.getElementById('btn-cancelar');
+  const formCliente = document.getElementById('form-cliente');
+
+  // Adiciona o evento de clique para resetar o formulário
+  btnCancelar.addEventListener('click', () => {
+    formCliente.reset();
+  });
+
 </script>

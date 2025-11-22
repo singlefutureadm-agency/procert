@@ -9,8 +9,8 @@
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="http://localhost/procert/public/assets/img/logo.png" rel="icon">
-  <link href="http://localhost/procert/public/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="<?= BASE_URL ?>/assets/img/logo.png" rel="icon">
+  <link href="<?= BASE_URL ?>/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -28,31 +28,128 @@
 
 
   <!-- Main CSS File -->
-  <link href="http://localhost/procert/public/assets/css/main.css" rel="stylesheet">
+  <link href="<?= BASE_URL ?>/assets/css/main.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: Gp
-  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
-  * Updated: Aug 15 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <style>
+    #login {
+      width: 100%;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url('<?= BASE_URL ?>/assets/img/hero-bg.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      padding: 0;
+
+
+    }
+
+    .container-login {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-position: center;
+      background-color: rgba(0, 0, 0, 0.65);
+    }
+
+    .glass-card {
+      max-width: 420px;
+      width: 100%;
+      border-radius: 20px;
+      padding: 40px;
+
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-input {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      color: #fff !important;
+    }
+
+    .glass-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .glass-input:focus {
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.35) !important;
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.25) !important;
+      color: #fff !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.4) !important;
+    }
+  </style>
 </head>
 
 <body>
 
+  <section id="login">
 
-  <form method="POST" action="<?= BASE_URL ?>auth/login">
-    <h1>Entrar</h1>
+    <div class="container-login">
 
-    
-    <span>ou entre com sua conta</span>
-    <input type="email" placeholder="Email" name="email" />
-    <input type="password" placeholder="Password" name="senha" />
-    <a href="#">Esqueceu sua senha?</a>
-    <button type="submit">Entrar</button>
-  </form>
 
+
+
+      <div class="container d-flex justify-content-center align-items-center vh-100 ">
+        <div class="card glass-card p-4">
+          <h2 class="text-center mb-3 text-white">Entrar</h2>
+          <p class="text-center text-light mb-4">ou entre com sua conta</p>
+
+          <form method="POST" action="<?= BASE_URL ?>auth/login">
+
+            <div class="mb-3">
+              <label class="form-label text-white-50">Email</label>
+              <input
+                type="email"
+                class="form-control form-control-lg glass-input"
+                placeholder="Digite seu email"
+                name="email"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-white-50">Senha</label>
+              <input
+                type="password"
+                class="form-control form-control-lg glass-input"
+                placeholder="Digite sua senha"
+                name="senha"
+                required>
+            </div>
+
+            <div class="text-end mb-3">
+              <a href="#" class="text-decoration-none text-white">Esqueceu sua senha?</a>
+            </div>
+
+            <button class="btn btn-primary w-100 btn-lg glass-button" type="submit">
+              Entrar
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+
+  </section>
 
 
 </body>
