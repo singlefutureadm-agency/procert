@@ -203,9 +203,9 @@
                 </li>
 
                 <li class="nav-item">
-                  <a href="<?= BASE_URL ?>servicos/inativos" class="nav-link">
+                  <a href="<?= BASE_URL ?>servicos/listar" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Inativos</p>
+                    <p>Listar</p>
                   </a>
                 </li>
               </ul>
