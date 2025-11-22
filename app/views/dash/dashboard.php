@@ -137,6 +137,18 @@
                 </p>
               </a>
 
+                <!-- ======================= ADMINISTRADOR ======================= -->
+            <li class="nav-item">
+              <a href="<?= BASE_URL ?>administrador/listar" class="nav-link">
+                <i class="nav-icon bi bi-people"></i>
+                <p>
+                  Administrador
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+              </a>
+
+              
+
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="./funcionario/cadastrar" class="nav-link">
